@@ -1,0 +1,8 @@
+build/
+Debug/
+Release/
+RelWithDebInfo/
+*~
+#*
+*.o
+*.so
