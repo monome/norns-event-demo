@@ -62,6 +62,7 @@ static int demo_start(lua_State *L) {
     quitting = false;
     generator = std::thread(&event_generator_thread);
     std::cout << "event_demo: generator started" << std::endl;
+    return 0;
 }
 
 static int demo_stop(lua_State *L) {
@@ -69,6 +70,7 @@ static int demo_stop(lua_State *L) {
     quitting = true;
     generator.join();
     std::cout << "event_demo: generator stopped";
+    return 0;
 }
 
 //
