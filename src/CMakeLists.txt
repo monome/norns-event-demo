@@ -20,4 +20,4 @@ set(SOURCE_FILES
 
 add_library(event_demo SHARED ${SOURCE_FILES})
 set_target_properties(event_demo PROPERTIES PREFIX "") # string `lib` prefix
-# target_link_libraries(event_demo pthread)
+target_link_libraries(event_demo pthread)
