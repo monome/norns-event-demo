@@ -4,6 +4,11 @@
 #include <thread>
 #include <iostream>
 
+// lua
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+
 extern "C" {
 // matron
 #include "event_types.h"
@@ -16,16 +21,21 @@ extern "C" {
 
 static std::thread generator;
 static bool quitting = false;
+static bool running = false;
 static uint32_t counter = 0;
 
 //
 // custom event and behavior
 //
 
-static void event_demo_weave_op(void *value) {
+static void event_demo_weave_op(void *value, lua_State *lvm) {
     uint32_t *cp = static_cast<uint32_t*>(value);
-    // TODO: call a global lua function with current counter value
     std::cout << "weave_op: called, counter = " << *cp << std::endl;
+
+    // call a global lua function with current counter value
+    lua_getglobal(lvm, "event_demo_handler");
+    lua_pushinteger(lvm, *cp);
+    lua_pcall(lvm, 1, 0, 0); // one argument, zero results, default error message
 }
 
 static void event_demo_free_op(void *value) {
@@ -59,17 +69,23 @@ static void event_generator_thread() {
 }
 
 static int demo_start(lua_State *L) {
-    quitting = false;
-    generator = std::thread(&event_generator_thread);
-    std::cout << "event_demo: generator started" << std::endl;
+    if (!running) {
+        quitting = false;
+        generator = std::thread(&event_generator_thread);
+        std::cout << "event_demo: generator started" << std::endl;
+        running = true;
+    }
     return 0;
 }
 
 static int demo_stop(lua_State *L) {
-    std::cout << "event_demo: stopping generator" << std::endl;
-    quitting = true;
-    generator.join();
-    std::cout << "event_demo: generator stopped";
+    if (running) {
+        std::cout << "event_demo: stopping generator" << std::endl;
+        quitting = true;
+        generator.join();
+        std::cout << "event_demo: generator stopped";
+        running = false;
+    }
     return 0;
 }
 
