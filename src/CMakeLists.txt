@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(event_demo CXX)
+set(LUA_MODULE_NAME "event_demo")
+
+project(lua-module CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
@@ -18,6 +20,9 @@ set(SOURCE_FILES
   lua_event_demo.cpp
 )
 
-add_library(event_demo MODULE ${SOURCE_FILES})
-set_target_properties(event_demo PROPERTIES PREFIX "") # string `lib` prefix
-target_link_libraries(event_demo pthread)
+add_library(lua-module MODULE ${SOURCE_FILES})
+set_target_properties(lua-module PROPERTIES
+  PREFIX ""     # strip `lib` prefix
+  OUTPUT_NAME "${LUA_MODULE_NAME}"
+)
+target_link_libraries(lua-module pthread)
