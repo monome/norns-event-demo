@@ -28,7 +28,7 @@ static uint32_t counter = 0;
 // custom event and behavior
 //
 
-static void event_demo_weave_op(void *value, lua_State *lvm) {
+static void event_demo_weave_op(lua_State *lvm, void *value, void *context) {
     uint32_t *cp = static_cast<uint32_t*>(value);
     std::cout << "weave_op: called, counter = " << *cp << std::endl;
 
@@ -38,7 +38,7 @@ static void event_demo_weave_op(void *value, lua_State *lvm) {
     lua_pcall(lvm, 1, 0, 0); // one argument, zero results, default error message
 }
 
-static void event_demo_free_op(void *value) {
+static void event_demo_free_op(void *value, void *context) {
     // nothing to do here since value is just a pointer to the global counter
     uint32_t *cp = static_cast<uint32_t*>(value);
     std::cout << "free_op: called" << std::endl;
@@ -57,7 +57,7 @@ static struct event_custom_ops event_demo_ops = {
 static void event_generator_thread() {
     while (!quitting) {
         // create a new event and post to matron's event queue
-        union event_data *ev = event_custom_new(&event_demo_ops, &counter);
+        union event_data *ev = event_custom_new(&event_demo_ops, &counter, NULL);
         event_post(ev);
 
         // increment global counter for laughs
