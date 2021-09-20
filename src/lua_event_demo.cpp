@@ -12,6 +12,7 @@
 extern "C" {
 // matron
 #include "event_types.h"
+#include "event_custom.h"
 #include "events.h"
 }
 
