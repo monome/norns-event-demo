@@ -28,8 +28,8 @@ make
 the build directory should now contain `norns-event-demo/` - a directory which is
 organized as a "mod" for matron.
 
-- to prepare a `norns-event-demo.zip` file suitable for distribution / installation via `maiden` run `make install-zip`
-- to build / copy the mod directly into `/home/we/dust/code/` run `make install-dust`
+- `make install-zip` will create `norns-event-demo.zip` suitable for distribution / installation via `maiden`
+- `make install-dust` will copy the mod directly into `/home/we/dust/code/`
 
 ## how it works
 
