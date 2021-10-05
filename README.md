@@ -25,12 +25,11 @@ cmake ..
 make
 ```
 
-the build directory should now contain:
+the build directory should now contain `norns-event-demo/` - a directory which is
+organized as a "mod" for matron.
 
-- `norns-event-demo/` - a directory which is
-organized as a "mod" for matron
-- `norns-event-demo.zip` - an archive of the mod suitable for distribution / installation via `maiden`
-
+- to prepare a `norns-event-demo.zip` file suitable for distribution / installation via `maiden` run `make install-zip`
+- to build / copy the mod directly into `/home/we/dust/code/` run `make install-dust`
 
 ## how it works
 
