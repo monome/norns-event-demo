@@ -29,6 +29,17 @@ static uint32_t counter = 0;
 // custom event and behavior
 //
 
+static int _report(lua_State *lvm, int status) {
+    // if pcall was not successful print the error and pop it off the stack to
+    // prevent overflow
+    if (status != LUA_OK) {
+        const char *msg = lua_tostring(lvm, -1);
+        lua_writestringerror("%s\n", msg);
+        lua_pop(lvm, 1);
+    }
+    return status;
+}
+
 static void event_demo_weave_op(lua_State *lvm, void *value, void *context) {
     uint32_t *cp = static_cast<uint32_t*>(value);
     std::cout << "weave_op: called, counter = " << *cp << std::endl;
@@ -36,7 +47,7 @@ static void event_demo_weave_op(lua_State *lvm, void *value, void *context) {
     // call a global lua function with current counter value
     lua_getglobal(lvm, "event_demo_handler");
     lua_pushinteger(lvm, *cp);
-    lua_pcall(lvm, 1, 0, 0); // one argument, zero results, default error message
+    _report(lvm, lua_pcall(lvm, 1, 0, 0)); // one argument, zero results, default error message
 }
 
 static void event_demo_free_op(void *value, void *context) {
